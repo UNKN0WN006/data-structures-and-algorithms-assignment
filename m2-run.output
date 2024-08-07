@@ -1,0 +1,25 @@
+Program returned: 0
+Program stdout
+All accounts before interest calculation:
+Account Number: 1000, Balance: Rs. 28549.00
+Account Number: 1001, Balance: Rs. 38807.00
+Account Number: 1002, Balance: Rs. 18463.00
+Account Number: 1003, Balance: Rs. 86429.00
+Account Number: 1004, Balance: Rs. 10207.00
+Account Number: 1005, Balance: Rs. 59025.00
+Account Number: 1006, Balance: Rs. 28678.00
+Account Number: 1007, Balance: Rs. 57798.00
+Account Number: 1008, Balance: Rs. 23603.00
+Account Number: 1009, Balance: Rs. 31841.00
+Total interest paid to all accounts: Rs. 19170.00
+All accounts after interest calculation:
+Account Number: 1000, Balance: Rs. 29976.45
+Account Number: 1001, Balance: Rs. 40747.35
+Account Number: 1002, Balance: Rs. 19386.15
+Account Number: 1003, Balance: Rs. 90750.45
+Account Number: 1004, Balance: Rs. 10717.35
+Account Number: 1005, Balance: Rs. 61976.25
+Account Number: 1006, Balance: Rs. 30111.90
+Account Number: 1007, Balance: Rs. 60687.90
+Account Number: 1008, Balance: Rs. 24783.15
+Account Number: 1009, Balance: Rs. 33433.05
