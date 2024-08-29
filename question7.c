@@ -1,110 +1,70 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-// Node structure for polynomial term
-typedef struct Node {
-    int coefficient;
-    int exponent;
-    struct Node* next;
-} Node;
+#define MAX 100  // Maximum number of non-zero elements
 
-// Function to create a new node
-Node* createNode(int coefficient, int exponent) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->coefficient = coefficient;
-    newNode->exponent = exponent;
-    newNode->next = NULL;
-    return newNode;
-}
+// Structure to store a non-zero element
+typedef struct {
+    int row;
+    int col;
+    int value;
+} SparseMatrix;
 
-// Function to insert a new node into the polynomial linked list
-Node* insertNode(Node* head, int coefficient, int exponent) {
-    Node* newNode = createNode(coefficient, exponent);
-    if (!head) return newNode;
+// Function to add two sparse matrices
+void addSparseMatrices(SparseMatrix mat1[], int size1, SparseMatrix mat2[], int size2, SparseMatrix result[], int *sizeResult) {
+    int i = 0, j = 0, k = 0;
 
-    Node* temp = head;
-    Node* prev = NULL;
-    while (temp && temp->exponent > exponent) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    if (temp && temp->exponent == exponent) {
-        temp->coefficient += coefficient;
-        free(newNode);
-    } else {
-        newNode->next = temp;
-        if (prev) {
-            prev->next = newNode;
+    while (i < size1 && j < size2) {
+        if (mat1[i].row < mat2[j].row || (mat1[i].row == mat2[j].row && mat1[i].col < mat2[j].col)) {
+            result[k++] = mat1[i++];
+        } else if (mat1[i].row > mat2[j].row || (mat1[i].row == mat2[j].row && mat1[i].col > mat2[j].col)) {
+            result[k++] = mat2[j++];
         } else {
-            head = newNode;
+            result[k].row = mat1[i].row;
+            result[k].col = mat1[i].col;
+            result[k].value = mat1[i].value + mat2[j].value;
+            i++; j++; k++;
         }
     }
 
-    return head;
+    while (i < size1) result[k++] = mat1[i++];
+    while (j < size2) result[k++] = mat2[j++];
+
+    *sizeResult = k;
 }
 
-// Function to multiply two sparse polynomials
-Node* multiplyPolynomials(Node* poly1, Node* poly2) {
-    Node* result = NULL;
-    Node* ptr1 = poly1;
-    Node* ptr2;
-
-    while (ptr1) {
-        ptr2 = poly2;
-        while (ptr2) {
-            int coeff = ptr1->coefficient * ptr2->coefficient;
-            int exp = ptr1->exponent + ptr2->exponent;
-            result = insertNode(result, coeff, exp);
-            ptr2 = ptr2->next;
-        }
-        ptr1 = ptr1->next;
+// Function to print a sparse matrix
+void printSparseMatrix(SparseMatrix mat[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("Row: %d, Column: %d, Value: %d\n", mat[i].row, mat[i].col, mat[i].value);
     }
-
-    return result;
-}
-
-// Function to print the polynomial
-void printPolynomial(Node* head) {
-    if (!head) {
-        printf("0\n");
-        return;
-    }
-
-    Node* temp = head;
-    while (temp) {
-        printf("%dx^%d", temp->coefficient, temp->exponent);
-        if (temp->next) printf(" + ");
-        temp = temp->next;
-    }
-    printf("\n");
 }
 
 int main() {
-    Node *poly1 = NULL, *poly2 = NULL;
+    SparseMatrix mat1[MAX], mat2[MAX], result[MAX];
+    int size1, size2, sizeResult;
 
-    // Polynomial 1: 3x^3 + 2x^1 + 1
-    poly1 = insertNode(poly1, 3, 3);
-    poly1 = insertNode(poly1, 2, 1);
-    poly1 = insertNode(poly1, 1, 0);
+    // Input size and elements for first sparse matrix
+    printf("Enter number of non-zero elements in first matrix: ");
+    scanf("%d", &size1);
+    printf("Enter row, column, and value for each element:\n");
+    for (int i = 0; i < size1; i++) {
+        scanf("%d %d %d", &mat1[i].row, &mat1[i].col, &mat1[i].value);
+    }
 
-    // Polynomial 2: 4x^2 + 3x^1 + 2
-    poly2 = insertNode(poly2, 4, 2);
-    poly2 = insertNode(poly2, 3, 1);
-    poly2 = insertNode(poly2, 2, 0);
+    // Input size and elements for second sparse matrix
+    printf("Enter number of non-zero elements in second matrix: ");
+    scanf("%d", &size2);
+    printf("Enter row, column, and value for each element:\n");
+    for (int i = 0; i < size2; i++) {
+        scanf("%d %d %d", &mat2[i].row, &mat2[i].col, &mat2[i].value);
+    }
 
-    // Multiply the polynomials
-    Node* result = multiplyPolynomials(poly1, poly2);
+    // Add the two sparse matrices
+    addSparseMatrices(mat1, size1, mat2, size2, result, &sizeResult);
 
     // Print the result
-    printf("Polynomial 1: ");
-    printPolynomial(poly1);
-
-    printf("Polynomial 2: ");
-    printPolynomial(poly2);
-
-    printf("Result: ");
-    printPolynomial(result);
+    printf("Resultant Sparse Matrix:\n");
+    printSparseMatrix(result, sizeResult);
 
     return 0;
 }
