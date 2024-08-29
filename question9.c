@@ -1,13 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure for linked list
 typedef struct Node {
     int data;
     struct Node* next;
 } Node;
 
-// Function to create a new node
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
@@ -15,7 +13,6 @@ Node* createNode(int data) {
     return newNode;
 }
 
-// Function to print the 2D array elements using the 1D array indices
 void print2DFrom1D(Node* head, int m, int n) {
     Node* temp = head;
     for (int i = 0; i < m; i++) {
@@ -39,7 +36,6 @@ int main() {
     Node* head = NULL;
     Node* tail = NULL;
 
-    // Input elements for the 1D array
     printf("Enter the elements of the array:\n");
     for (int i = 0; i < m * n; i++) {
         int data;
